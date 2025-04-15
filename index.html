@@ -11,19 +11,18 @@
   <p>Please wait while we prepare your PDF.</p>
 
   <script>
-    function getQueryParam(name) {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get(name);
-    }
+
+  window.addEventListener("message", (event) => {
+    const data = event.data;
+    if (data && data.geometry && data.name) {
+      const payload = {
+        geometry: data.geometry,
+        name: data.name
+      };
+
+    
     // Replace this with your actual flow URL
     const flowUrl = "https://prod-116.westus.logic.azure.com:443/workflows/03a8ee7371fc4069a0b87d345e024d1f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vNI8dCu-1MMHL2imYCxyYL3yHgTfRBN53P9xFkaVU3k";
-
-    // Optionally: customize inputs
-    const payload = {
-      feature_id: getQueryParam("site_id"),
-      feature_name: getQueryParam("name")
-    };
-
     fetch(flowUrl, {
       method: "POST",
       headers: {
