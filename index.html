@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Generating PDF...</title>
+  <meta charset="utf-8" />
+</head>
+<body>
+  <h2>Generating your report...</h2>
+  <p>Please wait while we prepare your PDF.</p>
+
+  <script>
+    // Replace this with your actual flow URL
+    const flowUrl = "https://prod-116.westus.logic.azure.com:443/workflows/03a8ee7371fc4069a0b87d345e024d1f/triggers/manual/paths/invoke?api-version=2016-06-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=vNI8dCu-1MMHL2imYCxyYL3yHgTfRBN53P9xFkaVU3k";
+
+    // Optionally: customize inputs
+    const payload = {
+      feature_id: "site123",
+      feature_name: "Solar Site Alpha"
+    };
+
+    fetch(flowUrl, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.pdf_url) {
+        // Redirect to the PDF
+        window.location.href = data.pdf_url;
+      } else {
+        document.body.innerHTML = "<p><strong>Failed to get PDF link.</strong></p>";
+        console.error("PDF URL not found in response:", data);
+      }
+    })
+    .catch(err => {
+      document.body.innerHTML = "<p><strong>Error generating PDF.</strong></p>";
+      console.error("Error:", err);
+    });
+  </script>
+</body>
+</html>
